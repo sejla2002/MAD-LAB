@@ -1,0 +1,160 @@
+
+java
+
+package com.example.myapplication;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+    EditText usernameEt,mobileEt,emailEt,pass1Et,pass2Et;
+    Button submitBtn;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        usernameEt=(EditText)  findViewById(R.id.username);
+        mobileEt=(EditText)  findViewById(R.id.mobile);
+        emailEt=(EditText) findViewById(R.id.Email);
+        pass1Et=(EditText) findViewById(R.id.password);
+        pass2Et=(EditText) findViewById(R.id.repass);
+        submitBtn=(Button) findViewById(R.id.submit);
+        sharedPreferences=getSharedPreferences("UserDetails",MODE_PRIVATE);
+        editor=sharedPreferences.edit();
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username=usernameEt.getText().toString().trim();
+                int mobile=Integer.parseInt(mobileEt.getText().toString().trim());
+                String email=emailEt.getText().toString().trim();
+                String pass1=pass1Et.getText().toString().trim();
+                String pass2=pass2Et.getText().toString().trim();
+                if(username.isEmpty()){
+                    usernameEt.setError("Username is empty");
+                    usernameEt.requestFocus();
+                    return;
+                }
+                if(email.isEmpty()){
+                    emailEt.setError("Input email");
+                    emailEt.requestFocus();
+                    return;
+                }
+                if(pass2.isEmpty()){
+                    pass1Et.setError("Enter Password");
+                    pass1Et.requestFocus();
+                    return;
+                }
+                if(pass1.length()<6){
+                    pass1Et.setError("Length must be minimum 6 characters");
+                    pass1Et.requestFocus();
+                    return;
+                }
+                if(!pass2.equals(pass1)){
+                    pass2Et.setError("Password not matched");
+                    pass2Et.requestFocus();
+                    return;
+                }
+                Toast.makeText(MainActivity.this,"Registration successfull",Toast.LENGTH_LONG).show();
+                editor.putString("keyusername",username);
+                editor.putInt("keymobile",mobile);
+                editor.putString("keymail",email);
+                editor.putString("keypassword",pass2);
+                editor.apply();
+
+            }
+        });
+    }
+}
+
+
+xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/head"
+        android:layout_width="1000dp"
+        android:layout_height="65dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:background="@color/black"
+        android:text="KMCT ITM"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="23dp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/head"
+        android:layout_marginTop="25dp"
+        android:hint="User Name"
+        android:textSize="20dp"
+        />
+
+    <EditText
+        android:id="@+id/mobile"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_marginTop="21dp"
+        android:hint="Mobile Number"
+        android:textSize="20dp"
+        />
+
+    <EditText
+        android:id="@+id/Email"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mobile"
+        android:layout_marginTop="18dp"
+        android:hint="Email Address"
+        android:textSize="20dp"
+        />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Email"
+        android:layout_marginTop="21dp"
+        android:hint="Enter Password"
+        android:textSize="20dp"
+        />
+
+    <EditText
+        android:id="@+id/repass"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password"
+        android:layout_marginTop="34dp"
+        android:hint="Retype Password"
+        android:textSize="20dp"/>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="143dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/repass"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp"
+        android:text="Submit"
+        android:textSize="15dp" />
+
+</RelativeLayout>
